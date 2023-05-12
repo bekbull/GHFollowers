@@ -13,6 +13,8 @@ class SearchViewController: UIViewController {
     let usernameTextField = GFTextField()
     let callToFunctionButton = GFButton(backgroundColor: .systemGreen, title: "Get Followers")
     
+    var isUsernameEntered: Bool  { return !usernameTextField.text!.isEmpty }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -33,6 +35,19 @@ class SearchViewController: UIViewController {
             action: #selector(UIView.endEditing(_:))
         )
         view.addGestureRecognizer(tap)
+    }
+    
+    @objc func pushFollowerListViewController() {
+        guard isUsernameEntered else {
+            presentGFAlertOnMainThread(title: "Empty Username", message: "Please enter a username. We need to know who to look for 🤠", buttonTitle: "Okay")
+            return
+        }
+        
+        let followerListViewController = FollowerListViewController()
+        followerListViewController.username = usernameTextField.text
+        followerListViewController.title = usernameTextField.text
+        
+        navigationController?.pushViewController(followerListViewController, animated: true)
     }
     
     func configureLogoImageView() {
@@ -63,6 +78,7 @@ class SearchViewController: UIViewController {
     
     func configureCallToActionButton() {
         view.addSubview(callToFunctionButton)
+        callToFunctionButton.addTarget(self, action: #selector(pushFollowerListViewController), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             callToFunctionButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
@@ -75,7 +91,7 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        print("return key is tapped")
+        pushFollowerListViewController()
         return true
     }
 }
