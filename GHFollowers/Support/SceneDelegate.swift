@@ -44,6 +44,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func createTabBar() -> UITabBarController {
         let tabBar = UITabBarController()
+
+        if #available(iOS 13.0, *) {
+            let tabBarAppearance: UITabBarAppearance = UITabBarAppearance()
+            tabBarAppearance.configureWithDefaultBackground()
+            UITabBar.appearance().standardAppearance = tabBarAppearance
+
+            if #available(iOS 15.0, *) {
+                UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+            }
+        }
+
         UITabBar.appearance().tintColor = .systemGreen
         tabBar.viewControllers = [createSearchNavigationController(), createFavoritesListNavigationController()]
         
