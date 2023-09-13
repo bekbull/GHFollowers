@@ -18,6 +18,11 @@ class FollowerCell: UICollectionViewCell {
         configure()
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        avatarImageView.image = UIImage(named: "avatar-placeholder")!
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
