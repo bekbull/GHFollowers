@@ -18,18 +18,17 @@ class FollowerCell: UICollectionViewCell {
         configure()
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        avatarImageView.image = UIImage(named: "avatar-placeholder")!
-    }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     func set(follower: Follower){
         usernameLabel.text = follower.login
-        avatarImageView.downloadImage(from: follower.avatarUrl)
+        NetworkManager.shared.downloadImage(with: follower.avatarUrl) { [weak self] image in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async { self.avatarImageView.image = image }
+        }
     }
     
     private func configure() {
